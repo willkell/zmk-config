@@ -1,7 +1,0 @@
-/*
- * The Corne shield references &pro_micro_i2c for OLED support, but the
- * Adafruit Feather nRF52840 is not a Pro Micro-compatible board and does
- * not define that label. Map it to i2c0 so the DTS parses correctly.
- * The OLED itself is disabled via CONFIG_ZMK_DISPLAY=n in corne.conf.
- */
-pro_micro_i2c: &i2c0 {};
