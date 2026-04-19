@@ -1,0 +1,9 @@
+/*
+ * Board extension for Adafruit Feather nRF52840.
+ * The Corne shield unconditionally references &pro_micro_i2c but the Feather
+ * is not a Pro Micro-compatible board and doesn't define that label.
+ * This board extension is applied before shield overlays, so the label is
+ * defined in time for corne.dtsi to reference it.
+ * The OLED is disabled via CONFIG_ZMK_DISPLAY=n so i2c0 won't actually be used.
+ */
+pro_micro_i2c: &i2c0 {};
