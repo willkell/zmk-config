@@ -1,0 +1,6 @@
+---
+include:
+  - board: adafruit_feather_nrf52840
+    shield: corne_left
+  - board: adafruit_feather_nrf52840
+    shield: corne_right

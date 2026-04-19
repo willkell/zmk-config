@@ -1,0 +1,166 @@
+// Copyright 2024 wk
+// SPDX-License-Identifier: MIT
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+
+#define ENTHIUM 0
+#define GAME    1
+#define QWERTY  2
+#define NAV     3
+#define SYM     4
+#define NUM     5
+#define FUN     6
+
+// Key positions (corne 3x6+3):
+//  0  1  2  3  4  5    6  7  8  9 10 11
+// 12 13 14 15 16 17   18 19 20 21 22 23
+// 24 25 26 27 28 29   30 31 32 33 34 35
+//             36 37 38   39 40 41
+
+/ {
+    behaviors {
+        // Shift+cw_caps = caps lock, plain = caps word (mirrors QMK CW_CAPS)
+        cw_caps: cw_caps {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&caps_word>, <&kp CAPS>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        // Tune mod-tap globally: require idle time before hold triggers,
+        // which approximates QMK's chordal hold / flow tap behavior.
+        mt {
+            flavor = "balanced";
+            tapping-term-ms = <220>;
+            require-prior-idle-ms = <150>;
+        };
+
+        lt {
+            flavor = "balanced";
+            tapping-term-ms = <220>;
+        };
+    };
+
+    combos {
+        compatible = "zmk,combos";
+
+        // Bottom row left: 24=sk(LSFT) 25=SQT 26=COMMA 27=DOT 28=SEMI 29=FSLH
+        combo_copy {
+            timeout-ms = <50>;
+            key-positions = <26 27>;
+            bindings = <&kp LC(C)>;
+        };
+        combo_shift_copy {
+            timeout-ms = <50>;
+            key-positions = <25 26 27>;
+            bindings = <&kp LC(LS(C))>;
+        };
+        combo_paste {
+            timeout-ms = <50>;
+            key-positions = <27 28>;
+            bindings = <&kp LC(V)>;
+        };
+        combo_shift_paste {
+            timeout-ms = <50>;
+            key-positions = <26 27 28>;
+            bindings = <&kp LC(LS(V))>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        enthium_layer {
+            bindings = <
+                &kp TAB      &kp Q        &kp Y        &kp O        &kp U        &kp EQUAL
+                &kp X        &kp L        &kp D        &kp W        &kp Z        &kp BSPC
+                &kp B        &mt LGUI C   &mt LALT I   &mt LSFT A   &mt LCTL E   &kp MINUS
+                &kp K        &mt RCTL H   &mt RSFT T   &mt RALT N   &mt RGUI S   &kp F
+                &sk LSFT     &kp SQT      &kp COMMA    &kp DOT      &kp SEMI     &kp FSLH
+                &kp J        &kp M        &kp G        &kp P        &kp V        &sk RSFT
+                &lt FUN DEL  &lt NAV SPACE  &lt SYM ESC
+                &kp RET      &lt NUM R      &kp BSPC
+            >;
+        };
+
+        game_layer {
+            bindings = <
+                &kp TAB      &kp Q    &kp W      &kp E    &kp R    &kp T
+                &kp Y        &kp U    &kp I      &kp O    &kp P    &kp BSPC
+                &kp LSFT     &kp A    &kp S      &kp D    &kp F    &kp G
+                &kp H        &kp J    &kp K      &kp L    &kp SQT  &kp SEMI
+                &kp LCTL     &kp Z    &kp X      &kp C    &kp V    &kp B
+                &kp N        &kp M    &kp COMMA  &kp DOT  &kp FSLH &kp RET
+                &lt NAV DEL  &kp SPACE  &lt SYM ESC
+                &none        &mo NAV    &kp BSPC
+            >;
+        };
+
+        qwerty_layer {
+            bindings = <
+                &kp TAB      &kp Q       &kp W       &kp E        &kp R        &kp T
+                &kp Y        &kp U       &kp I       &kp O        &kp P        &kp BSPC
+                &kp ESC      &mt LGUI A  &mt LALT S  &mt LSFT D   &mt LCTL F   &kp G
+                &kp H        &mt RCTL J  &mt RSFT K  &mt RALT L   &mt RGUI SQT &kp SEMI
+                &none        &kp Z       &kp X       &kp C        &kp V        &kp B
+                &kp N        &kp M       &kp COMMA   &kp DOT      &kp FSLH     &kp RET
+                &lt FUN DEL  &kp SPACE   &sk LSFT
+                &none        &mo NAV     &kp BSPC
+            >;
+        };
+
+        nav_layer {
+            bindings = <
+                &kp TAB   &bootloader  &to QWERTY   &to GAME    &to ENTHIUM  &none
+                &kp LC(Y) &kp LC(V)    &kp LC(C)    &kp LC(X)   &kp LC(Z)    &none
+                &none     &mt LGUI A   &mt LALT S   &mt LSFT D  &mt LCTL F   &none
+                &cw_caps  &kp LEFT     &kp DOWN     &kp UP      &kp RIGHT    &none
+                &none     &kp LC(Z)    &kp LC(X)    &kp LC(C)   &kp LC(V)    &none
+                &kp HOME  &kp PG_DN    &kp PG_UP    &kp END     &kp INS      &kp RET
+                &none     &none        &none
+                &none     &kp BSPC     &kp DEL
+            >;
+        };
+
+        sym_layer {
+            bindings = <
+                &kp TAB   &kp GRAVE  &kp TILDE  &kp LBRC   &kp RBRC   &kp PIPE
+                &kp DLLR  &none      &none      &none      &none      &none
+                &none     &kp EXCL   &kp AT     &kp LPAR   &kp RPAR   &kp HASH
+                &kp PRCNT &kp RCTL   &kp RSFT   &kp RALT   &kp RGUI   &none
+                &kp ESC   &kp BSLH   &kp AMPS   &kp LBKT   &kp RBKT   &kp ASTRK
+                &kp CARET &none      &none      &none      &none      &kp RET
+                &none     &kp SPACE  &none
+                &kp SPACE &none      &none
+            >;
+        };
+
+        num_layer {
+            bindings = <
+                &kp TAB   &kp ASTRK  &kp N7     &kp N8     &kp N9     &kp PLUS
+                &none     &to QWERTY &to GAME   &none      &bootloader &none
+                &none     &kp N0     &kp N4     &kp N5     &kp N6     &kp EQUAL
+                &none     &kp LSFT   &kp LCTL   &kp LALT   &kp LGUI   &none
+                &none     &kp FSLH   &kp N1     &kp N2     &kp N3     &kp MINUS
+                &none     &none      &none      &none      &none      &kp RET
+                &kp DOT   &kp SPACE  &kp ESC
+                &none     &none      &none
+            >;
+        };
+
+        fun_layer {
+            bindings = <
+                &kp TAB      &kp F12    &kp F7     &kp F8       &kp F9     &kp PSCRN
+                &none        &to QWERTY &to GAME   &none        &bootloader &none
+                &none        &kp F11    &kp F4     &kp F5       &kp F6     &kp SLCK
+                &kp C_VOL_UP &kp LSFT  &kp LCTL   &kp LALT     &kp LGUI   &none
+                &none        &kp F10    &kp F1     &kp F2       &kp F3     &kp PAUSE_BREAK
+                &kp C_VOL_DN &kp C_MUTE &kp C_PP  &kp C_PREV   &kp C_NEXT &kp RET
+                &kp K_APP  &kp SPACE  &kp ESC
+                &none      &none      &none
+            >;
+        };
+    };
+};
