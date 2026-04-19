@@ -1,0 +1,11 @@
+/*
+ * Compatibility shim for Adafruit Feather nRF52840 with Pro Micro shields.
+ *
+ * The Corne shield's corne.dtsi unconditionally references &pro_micro_i2c,
+ * a label that Pro Micro-compatible boards define but the Feather does not.
+ *
+ * This shield must be listed BEFORE corne_left/corne_right in build.yaml so
+ * that this overlay is concatenated into the DTS input before corne.dtsi
+ * references the label. dtc processes the input linearly, so order matters.
+ */
+pro_micro_i2c: &i2c0 {};

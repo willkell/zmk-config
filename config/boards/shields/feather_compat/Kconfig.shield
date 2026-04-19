@@ -1,0 +1,2 @@
+config SHIELD_FEATHER_COMPAT
+    bool "Feather nRF52840 Pro Micro compatibility shim"

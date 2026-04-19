@@ -1,6 +1,6 @@
 ---
 include:
   - board: adafruit_feather_nrf52840
-    shield: corne_left
+    shield: feather_compat corne_left
   - board: adafruit_feather_nrf52840
-    shield: corne_right
+    shield: feather_compat corne_right
